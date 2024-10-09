@@ -14,23 +14,32 @@ enum TeacherRating: String {
 struct ContentView: View {
     @State private var teacherRating: TeacherRating?
     @State private var areasForImprovement: String = ""
-    @State private var enthusiasm: Int = 5
-    @State private var subjectExpertise: String = ""
+    @State private var enthusiasm: Double = 5
+    @State private var subjectExpertise: Int = 1
     
     var body: some View {
         VStack {
+            TextField("Areas for Improvement", text: $areasForImprovement)
+                .padding()
+            Slider(value: $enthusiasm, in: 1...10, label: { Text("Enthusiasm Level") }, minimumValueLabel: { Text("Lettuce Leaf")}, maximumValueLabel: { Text("Energiser Bunny")})
+            Picker("Subject Expertise:", selection: $subjectExpertise) {
+                Text("Knows their stuff").tag(3)
+                Text("Not Bad").tag(2)
+                Text("Knows nothing").tag(1)
+            }
             Button("Rate!") {
                 rateMyTeacher()
             }
+            .padding()
             Text("Teacher Rating: \(teacherRating?.rawValue ?? "Not yet calculated")")
         }
         .padding()
     }
     
     func rateMyTeacher() {
-        if subjectExpertise == "Knows their stuff" && enthusiasm > 7 && areasForImprovement.count <= 10 {
+        if subjectExpertise == 3 && enthusiasm > 7 && areasForImprovement.count <= 10 {
             teacherRating = .excellent
-        } else if subjectExpertise == "Not Bad" && enthusiasm > 4 {
+        } else if subjectExpertise >= 2 && enthusiasm > 4 {
             teacherRating = .average
         } else {
             teacherRating = .poor
