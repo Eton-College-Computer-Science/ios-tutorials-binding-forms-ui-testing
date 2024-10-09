@@ -18,22 +18,26 @@ struct ContentView: View {
     @State private var subjectExpertise: Int = 1
     
     var body: some View {
-        VStack {
-            TextField("Areas for Improvement", text: $areasForImprovement)
+        Form {
+            Section(content: {
+                TextField("Areas for Improvement", text: $areasForImprovement)
+                    .padding()
+                Slider(value: $enthusiasm, in: 1...10, label: { Text("Enthusiasm Level") }, minimumValueLabel: { Text("Lettuce Leaf")}, maximumValueLabel: { Text("Energiser Bunny")})
+                Picker("Subject Expertise:", selection: $subjectExpertise) {
+                    Text("Knows their stuff").tag(3)
+                    Text("Not Bad").tag(2)
+                    Text("Knows nothing").tag(1)
+                }
+            }, header: { Text("What do you think of your teacher?") })
+            Section(content: {
+                Button("Rate!") {
+                    rateMyTeacher()
+                }
                 .padding()
-            Slider(value: $enthusiasm, in: 1...10, label: { Text("Enthusiasm Level") }, minimumValueLabel: { Text("Lettuce Leaf")}, maximumValueLabel: { Text("Energiser Bunny")})
-            Picker("Subject Expertise:", selection: $subjectExpertise) {
-                Text("Knows their stuff").tag(3)
-                Text("Not Bad").tag(2)
-                Text("Knows nothing").tag(1)
-            }
-            Button("Rate!") {
-                rateMyTeacher()
-            }
-            .padding()
-            Text("Teacher Rating: \(teacherRating?.rawValue ?? "Not yet calculated")")
+                Text("Teacher Rating: \(teacherRating?.rawValue ?? "Not yet calculated")")
+            }, header: { Text("Calculate Rating")} )
+            
         }
-        .padding()
     }
     
     func rateMyTeacher() {
